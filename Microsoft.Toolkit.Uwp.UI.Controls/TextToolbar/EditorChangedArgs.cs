@@ -26,11 +26,11 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
         /// <summary>
         /// Gets the old Instance that is being Replaced
         /// </summary>
-        public RichEditBox Old { get; internal set; }
+        public object Old { get; internal set; }
 
         /// <summary>
         /// Gets the new Instance that is being Set
         /// </summary>
-        public RichEditBox New { get; internal set; }
+        public object New { get; internal set; }
     }
 }

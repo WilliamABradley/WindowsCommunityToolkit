@@ -90,6 +90,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats.RichText
 
         private CommonButtons CommonButtons { get; }
 
+        /// <inheritdoc/>
         public override string Text
         {
             get
@@ -112,6 +113,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats.RichText
 
         internal ToolbarButton OrderedListButton { get; set; }
 
+        /// <inheritdoc/>
         public override ButtonMap DefaultButtons
         {
             get

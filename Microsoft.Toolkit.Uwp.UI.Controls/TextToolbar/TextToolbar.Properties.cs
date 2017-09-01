@@ -25,7 +25,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
     {
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EditorProperty =
-            DependencyProperty.Register(nameof(Editor), typeof(RichEditBox), typeof(TextToolbar), new PropertyMetadata(null, OnEditorChanged));
+            DependencyProperty.Register(nameof(Editor), typeof(object), typeof(TextToolbar), new PropertyMetadata(null, OnEditorChanged));
 
         // Using a DependencyProperty as the backing store for Formatting.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty FormatProperty =
@@ -54,9 +54,9 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls
         /// <summary>
         /// Gets or sets the RichEditBox to Attach to, this is required for any formatting to work.
         /// </summary>
-        public RichEditBox Editor
+        public object Editor
         {
-            get { return (RichEditBox)GetValue(EditorProperty); }
+            get { return (object)GetValue(EditorProperty); }
             set { SetValue(EditorProperty, value); }
         }
 
