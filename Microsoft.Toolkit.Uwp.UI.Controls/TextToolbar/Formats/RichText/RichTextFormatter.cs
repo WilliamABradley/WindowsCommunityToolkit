@@ -18,9 +18,15 @@ using Windows.UI.Xaml.Controls;
 
 namespace Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats.RichText
 {
-    // Rudimentary showcase of RichText and Toggleable Toolbar Buttons.
+    /// <summary>
+    /// Rudimentary showcase of RichText and Toggleable Toolbar Buttons.
+    /// </summary>
     public class RichTextFormatter : Formatter
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RichTextFormatter"/> class.
+        /// </summary>
+        /// <param name="model">The <see cref="TextToolbar"/></param>
         public RichTextFormatter(TextToolbar model)
             : base(model)
         {
@@ -28,6 +34,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats.RichText
             ButtonActions = new RichTextButtonActions(this);
         }
 
+        /// <inheritdoc/>
         public override void OnSelectionChanged()
         {
             if (Selected.CharacterFormat.Bold == FormatEffect.On)
@@ -150,12 +157,16 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats.RichText
             }
         }
 
+        /// <summary>
+        /// Gets or sets format used for formatting selection in editor
+        /// </summary>
         public ITextCharacterFormat SelectionFormat
         {
             get { return Selected.CharacterFormat; }
             set { Selected.CharacterFormat = value; }
         }
 
+        /// <inheritdoc/>
         public override string NewLineChars => "\r\n";
     }
 }
