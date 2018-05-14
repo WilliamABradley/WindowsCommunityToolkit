@@ -11,13 +11,17 @@
 // ******************************************************************
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Toolkit.Parsers.Core;
 using Microsoft.Toolkit.Parsers.Markdown;
 using Microsoft.Toolkit.Parsers.Markdown.Inlines;
 using Microsoft.Toolkit.Parsers.Markdown.Render;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
 namespace Microsoft.Toolkit.Uwp.UI.Controls.Markdown.Render
@@ -83,6 +87,7 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.Markdown.Render
 
             var result = new RichTextBlock
             {
+                Tag = TextBlockCounter,
                 CharacterSpacing = CharacterSpacing,
                 FontFamily = FontFamily,
                 FontSize = FontSize,
@@ -90,12 +95,67 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.Markdown.Render
                 FontStyle = FontStyle,
                 FontWeight = FontWeight,
                 Foreground = localContext.Foreground,
-                IsTextSelectionEnabled = IsTextSelectionEnabled,
+                IsTextSelectionEnabled = false,
                 TextWrapping = TextWrapping
             };
             localContext.BlockUIElementCollection?.Add(result);
 
+            result.PointerPressed += Result_PointerPressed;
+            result.PointerReleased += Result_PointerReleased;
+            result.PointerMoved += Result_PointerMoved;
+
+            blocks.Add(result);
+            TextBlockCounter++;
             return result;
+        }
+
+        private bool selectionStarted = false;
+        private List<RichTextBlock> blocks = new List<RichTextBlock>();
+        private int startID = 0;
+
+        private void Result_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            selectionStarted = false;
+        }
+
+        private void Result_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            selectionStarted = true;
+        }
+
+        private void Result_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            if (selectionStarted)
+            {
+                var source = sender as RichTextBlock;
+                var id = (int)source.Tag;
+
+                var point = e.GetCurrentPoint(source);
+                var selecter = source.GetPositionFromPoint(point.Position);
+
+                var background = Application.Current.Resources["SystemControlHighlightAccentBrush"] as SolidColorBrush;
+                var foreground = new SolidColorBrush(Colors.White);
+
+                var filledBlocks = blocks
+                    .Where(block =>
+                    {
+                        var blockId = (int)block.Tag;
+                        return blockId >= startID && blockId < id;
+                    });
+
+                foreach (var block in blocks)
+                {
+                    block.TextHighlighters.Clear();
+                }
+
+                foreach (var filledBlock in filledBlocks)
+                {
+                    filledBlock.TextHighlighters.Add(new TextHighlighter { Background = background, Foreground = foreground, Ranges = { new TextRange { StartIndex = 0, Length = filledBlock.ContentEnd.Offset } } });
+                }
+
+                source.TextHighlighters.Clear();
+                source.TextHighlighters.Add(new TextHighlighter { Background = background, Foreground = foreground, Ranges = { new TextRange { StartIndex = 0, Length = selecter.Offset } } });
+            }
         }
 
         /// <summary>

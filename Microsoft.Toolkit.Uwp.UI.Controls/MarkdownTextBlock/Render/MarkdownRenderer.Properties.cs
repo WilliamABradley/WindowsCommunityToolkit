@@ -27,6 +27,11 @@ namespace Microsoft.Toolkit.Uwp.UI.Controls.Markdown.Render
                         (_textDecorationsSupported = ApiInformation.IsTypePresent("Windows.UI.Text.TextDecorations")));
 
         /// <summary>
+        /// Indexer for TextBlocks.
+        /// </summary>
+        private int TextBlockCounter = 0;
+
+        /// <summary>
         /// Gets the interface that is used to register hyperlinks.
         /// </summary>
         protected ILinkRegister LinkRegister { get; }
